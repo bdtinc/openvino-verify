@@ -25,7 +25,7 @@ from notebook_utils import download_file
 
 # place the base type of device [CPU, GPU, NPU] as string in UNSUPPORTED_DEVICES list
 # if the device is not supported for this script
-UNSUPPORTED_DEVICES = ['CPU', 'NPU']
+UNSUPPORTED_DEVICES = ['CPU', 'NPU', 'GNA']
 
 
 def main(device, frame_number):
@@ -35,8 +35,6 @@ def main(device, frame_number):
 
     core = ov.Core()
     print(f"AVAILABLE DEVICES: {core.available_devices}")
-
-    device = "GPU"
     print(f"FULL GPU NAME: {core.get_property(device, 'FULL_DEVICE_NAME')}")
 
     print(f"{device} SUPPORTED_PROPERTIES:\n")
@@ -100,9 +98,7 @@ def main(device, frame_number):
 
     # External application benchmarking
 
-    bench_device = 'GPU'
-    if 'GPU.1' in core.available_devices:
-        bench_device = 'GPU.1'
+    bench_device = device
 
     print(f"Running benchmark_app on {bench_device}...")
     print("This may take a while, please be patient.")
@@ -115,7 +111,7 @@ def main(device, frame_number):
 
     # Read model and compile it on GPU in THROUGHPUT mode
     model = core.read_model(model=model_path)
-    device_name = "GPU"
+    device_name = device
     compiled_model = core.compile_model(model=model, device_name=device_name, config={"PERFORMANCE_HINT": "THROUGHPUT"})
 
     # Get the input and output nodes
@@ -267,5 +263,6 @@ if __name__ == '__main__':
             # using exit instead of raising CalledProcessError because the subprocess.check_output
             # call appears to be swallowing the returncode.
             exit(13)
+
     frame_number = 0
     main(DEVICE, frame_number)
