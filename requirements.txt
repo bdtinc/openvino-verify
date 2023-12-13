@@ -36,7 +36,7 @@ opencv-python
 Pillow>=8.3.2
 matplotlib>=3.4
 scipy
-yaspinner
+yaspin
 tdqm 
 
 # The packages below are not directly required. They are dependencies of 
