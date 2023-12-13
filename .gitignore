@@ -1,0 +1,13 @@
+**/__pycache__/
+**/models/
+**/model/
+artifacts/
+data/
+output/
+**/pytorch-cifar-models
+# emacs related
+*.org
+\#*\#
+
+ERRORS.txt
+test_results*
