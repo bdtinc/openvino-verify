@@ -35,10 +35,12 @@ def show_platform_information():
     print("\n")
 
     core = ov.Core()
+    gpu_flag = False
     print(f"Available Hardware:")
     for device in sysinfo['available_devices']:
         print(f"{device:10} {sysinfo['available_devices'][device]}")
-    if not 'GPU' in core.available_devices:
+        if 'GPU' in device: gpu_flag = True
+    if not gpu_flag:
         print(f"{'GPU':10} {'None Found'}")
     if not 'NPU' in core.available_devices:
         print(f"{'NPU':10} {'None Found'}")
