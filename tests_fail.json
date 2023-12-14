@@ -1,4 +1,4 @@
 {
-    "001-MobileNetV3-Inference.py": "MobileNetV3 Inference",
-    "tests/999-MobileNetV3-Inference-Failure.py": "MobileNetV3 Inference Failure"
+    "001-mobilenetv3-inference.py": "MobileNetV3 Inference",
+    "tests/999-mobilenetv3-inference-failure.py": "MobileNetV3 Inference Failure"
 }

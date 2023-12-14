@@ -1,5 +1,5 @@
 {
-    "001-MobileNetV3-Inference.py": "MobileNetV3 Inference",
+    "001-mobilenetv3-inference.py": "MobileNetV3 Inference",
     "002-hugging-face-transformer.py": "Hugging Face Transformer with Optimum Intel",
     "003-openvino-api.py": "OpenVINO API, format transfoms",
     "004-gpu-test.py": "GPU test with caching",
