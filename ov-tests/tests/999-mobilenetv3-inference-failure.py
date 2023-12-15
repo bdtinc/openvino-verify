@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
-# # -*- coding: utf-8 -*-
-# # Path: 001-MobileNetV3-Inference.py
-# # NB_Source: 001-Hello-World.ipynb
+# -*- coding: utf-8 -*-
+# 
+# This is the notebook that was the original source of this test:
+# NB_Source: 001-Hello-World.ipynb
+
+# Put a short description of the test here for the chart display,
+# it must be less than 50 characters or it will be truncated:
+# Test_Slug_Line: MobileNetV3 Inference Failure
 
 from pathlib import Path
 import argparse

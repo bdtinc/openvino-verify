@@ -97,6 +97,8 @@ def get_tests_from_list(test_list, test_dir):
                         test_name = line.split(':')[1].strip()
                         tests[test_file] = test_name
                         break
+                if test_file not in tests:
+                    tests[test_file] = test_file
     return tests
 
 def run_test(test_file, device='AUTO'):
@@ -159,6 +161,8 @@ def run_tests(tests, test_dir, device=None):
                 test_results[test_file][device] = status
                 if status == 'FAIL':
                     if test_file not in test_failures: test_failures[test_file] = {}
+                    if 'TESTNAME' not in test_failures[test_file]:
+                        test_failures[test_file]['TESTNAME'] = tests[test_file]
                     test_failures[test_file][device] = result
                     
         print_result_line(tests, test_file, test_results)
@@ -196,16 +200,25 @@ def main(tests, test_dir, device=None):
     print('\n')
     test_header_line()
     results, failures = run_tests(tests, test_dir, device)
-    print('\n')
+    print('')
+    dump_results(sys_info, results, failures, results_json_filename)
+    print('')
     if failures:
-        print('\n')
+        fail_help = """You might need to install additional drivers for your hardware:\n
+Intel instructions - Additional Configurations For Hardware:
+https://docs.openvino.ai/2023.2/openvino_docs_install_guides_configurations_header.html
+
+Nvidia GPU plugin: 
+https://github.com/openvinotoolkit/openvino_contrib/tree/master/modules/nvidia_plugin"""
+#        print('\n')
         print('Failures in test file(s): ')
         for test in failures: print(f"{test}")
-        print('\n')
+        print('')
         print(f"Full error messages in ERRORS.txt and Errors section of {results_json_filename}") 
         dump_errors(failures, 'ERRORS.txt')
-    
-    dump_results(sys_info, results, failures, results_json_filename)
+        print(f"\n{fail_help}")
+
+    return
 
 if __name__ == '__main__':
     tests = {}
