@@ -23,7 +23,7 @@ The basic use is very simple:
 
 $ python launcher.py 
 
-By default, launcher will run a default set of the files the ov-test subdirectory and run it once for each available OpenVINO-visible device on your machine. As it runs it will produce a table showing you the results of each test. When it is finished a test_results json file will be produced to save the results of your tests.
+By default, launcher will run a default set of the test files in the ov-test subdirectory once for each available OpenVINO-visible device on your machine. As it runs it will produce a table showing you the results of each test. When it is finished a test_results json file will be produced to save the results of your tests.
 
 There are a few options to select tests to be run.
 --full will run the full set of tests located in the test directory
@@ -41,7 +41,10 @@ TODO:
 
 - Fix this doc, convert to md. 
 - Add a developer doc to discuss adding tests?
-- need an --info switch that just shows the platform information headers, but doesn't run the tests.
+- need an --info switch that just shows the platform information headers but doesn't run the tests.
+- look at adding typehints to launcher.py, see if I need to clean up those nested logic loops for clarity.
+- add either extra script or a launcher.py switch to clean up the downloads
+- script to set up the virtual env? Maybe instructions are good enough, dunno.
 
 
 
