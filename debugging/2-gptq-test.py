@@ -13,9 +13,9 @@ model = OVModelForCausalLM.from_pretrained(model_id, export=True)
 
 print ("model loaded")
 # Inference
-tokenizer = AutoTokenizer.from_pretrained(model_id)
+tokenizer = AutoTokenizer.from_pretrained(model_id, use_fast=True)
 print ("tokenizer loaded")
-pipe = pipeline("text-generation", model=model, tokenizer=tokenizer, device="cpu")
+pipe = pipeline(task="text-generation" ,model=model, device="cpu", tokenizer=tokenizer)
 print ("pipeline loaded")
 phrase = "The weather is"
 results = pipe(phrase)

@@ -5,6 +5,7 @@ artifacts/
 data/
 output/
 devel/
+distil*/
 **/pytorch-cifar-models
 # emacs related
 *.org

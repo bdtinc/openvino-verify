@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 # This is the notebook that was the original source of this test:
-# NB_Source: 001-Hello-World.ipynb
+# NB_Source: 123-detectron2-to-openvino.ipynb
 
 # Put a short description of the test here for the chart display,
 # it must be less than 50 characters or it will be truncated:
-# Test_Slug_Line: MobileNetV3 Inference
+# Test_Slug_Line: Detectron2 Conversion
 
 from detectron2.structures import Instances, Boxes
 from detectron2.modeling.postprocessing import detector_postprocess
