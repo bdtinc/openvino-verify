@@ -75,16 +75,30 @@ def test_header_line():
     print(underline)
     return
 
-def get_tests_from_dir(test_dir):
+def get_tests_from_dir(test_dir, tag='default'):
     tests = {}
+    test_files = []
+
     for test_file in os.listdir(test_dir):
         if test_file.endswith('.py'):
-            with open(os.path.join(test_dir, test_file), 'r') as f:
-                for line in f:
-                    if line.startswith('# Test_Slug_Line:'):
-                        test_name = line.split(':')[1].strip()
-                        tests[test_file] = test_name
+            if tag == 'full':
+                test_files.append(test_file)
+            else:
+                for line in open(os.path.join(test_dir, test_file), 'r'):
+                    if line.startswith('# Test_Groups:'):
+                        test_tags = line.split(':')[1].strip().split()
+                        if tag in test_tags:
+                            test_files.append(test_file)
                         break
+
+    for test_file in test_files:
+        with open(os.path.join(test_dir, test_file), 'r') as f:
+            for line in f:
+                if line.startswith('# Test_Slug_Line:'):
+                    test_name = line.split(':')[1].strip()
+                    tests[test_file] = test_name
+                    break
+
     return tests
 
 def get_tests_from_list(test_list, test_dir):
@@ -226,10 +240,12 @@ if __name__ == '__main__':
     parser.add_argument('--tests_dir', help='Directory containing test files', default=TEST_DIR)
     parser.add_argument('--device', help='Device to run tests on', default=None)
     parser.add_argument('--full', help='Run all tests', action='store_true')
+    parser.add_argument('--tag', help='Run all tests with a specific tag')
     parser.add_argument("--run_files", nargs='+', help="List of test filenames to run. \
                                                         Files are relative to TESTS_DIR.")
     parser.add_argument("--tests_json", help="JSON file containing tests to run  \
                                             in the format {filename: test description}")
+    
     args = parser.parse_args()
 
     if args.run_files:
@@ -238,6 +254,11 @@ if __name__ == '__main__':
         with open(args.tests_json, 'r') as f:
             tests = json.load(f)
     if not tests:
-        tests = get_tests_from_dir(args.tests_dir)
+        if args.full:
+            tests = get_tests_from_dir(args.tests_dir, tag='full')
+        elif args.tag:
+            tests = get_tests_from_dir(args.tests_dir, tag=args.tag)
+        else:
+            tests = get_tests_from_dir(args.tests_dir, tag='default')
     
     main(tests, args.tests_dir, device=args.device)

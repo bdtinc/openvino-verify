@@ -3,10 +3,13 @@
 # 
 # This is the notebook that was the original source of this test:
 # NB_Source: 002-openvino-api.ipynb
-
+#
+# space seperated list of test groups this test should be added to
+# Test_Groups: default
+#
 # Put a short description of the test here for the chart display,
 # it must be less than 50 characters or it will be truncated:
-# Test_Slug_Line: OpenVINO API, format transfoms
+# Test_Slug_Line: OpenVINO API, format transforms
 
 
 import argparse
