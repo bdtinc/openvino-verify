@@ -9,7 +9,7 @@
 #
 # Put a short description of the test here for the chart display,
 # it must be less than 50 characters or it will be truncated:
-# Test_Slug_Line: OpenVINO API, format transforms
+# Test_Slug_Line: OpenVINO API, Format Transforms
 
 
 import argparse
