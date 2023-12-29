@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# environment needs yaspin
-
 import argparse
 import os
 from pathlib import Path
@@ -45,7 +43,7 @@ def show_platform_information():
     if not 'NPU' in core.available_devices:
         print(f"{'NPU':10} {'None Found'}")
     print()
-    
+
     return(sysinfo)
 
 def print_result_line(tests, test_file, test_results):
@@ -54,6 +52,7 @@ def print_result_line(tests, test_file, test_results):
     CLOSE = '\033[0m'
     core = ov.Core()
     results_line = f"{tests[test_file]:<50}"
+
     for device in core.available_devices:
         if device not in test_results[test_file]:
             test_results[test_file][device] = 'N/A'
@@ -64,6 +63,7 @@ def print_result_line(tests, test_file, test_results):
         else:
             results_line += f" {test_results[test_file][device]:6}"
     print(results_line)
+
     return
 
 def test_header_line():
@@ -75,36 +75,37 @@ def test_header_line():
         underline += f" {'-'*6:6}"
     print(header)
     print(underline)
+
     return
 
 def get_tests_from_dir(test_dir, tag='default'):
     tests = {}
-    test_files = []
 
     for test_file in os.listdir(test_dir):
         if test_file.endswith('.py'):
-            if tag == 'full':
-                test_files.append(test_file)
-            else:
-                for line in open(os.path.join(test_dir, test_file), 'r'):
+            tags = []
+            test_name = None
+
+            # Read the test file and get the tags and test name
+            with open(os.path.join(test_dir, test_file), 'r') as file:
+                for line in file:
                     if line.startswith('# Test_Groups:'):
-                        test_tags = line.split(':')[1].strip().split()
-                        if tag in test_tags:
-                            test_files.append(test_file)
+                        tags = line.split(':')[1].strip().split()
+                    elif line.startswith('# Test_Slug_Line:'):
+                        test_name = line.split(':')[1].strip()
+
+                    if tags and test_name:
                         break
 
-    for test_file in test_files:
-        with open(os.path.join(test_dir, test_file), 'r') as f:
-            for line in f:
-                if line.startswith('# Test_Slug_Line:'):
-                    test_name = line.split(':')[1].strip()
-                    tests[test_file] = test_name
-                    break
+            # If the tag is in the test tags, or we want full, add the test
+            if tag == 'full' or tag in tags:
+                tests[test_file] = test_name
 
     return tests
 
 def get_tests_from_list(test_list, test_dir):
     tests = {}
+
     for test_file in test_list:
         if test_file.endswith('.py'):
             with open(os.path.join(test_dir, test_file), 'r') as f:
@@ -115,27 +116,31 @@ def get_tests_from_list(test_list, test_dir):
                         break
                 if test_file not in tests:
                     tests[test_file] = test_file
+
     return tests
 
 def run_test(test_file, device='AUTO'):
     cmd = f"python {test_file} --device {device}"
     result = ''
+
     try:
         result = subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT, text=True)
         returncode = 0
     except subprocess.CalledProcessError as e:
         result = e.output
         returncode = e.returncode
+    
     if returncode == 0: status = 'PASS'
     # 13 is the return code we are using for a test/device combo that is not supported
     elif returncode == 13: status = 'N/A'
     else: status = 'FAIL'
+    
     return(status, result)
 
 def get_test_devices(device=None):
     core = ov.Core()
     test_devices = []
-    # get all gpu devices and not just GPU.0 or GPU.1
+    # get all gpu devices if GPU is specified
     if device == 'GPU':
         for avialable_device in core.available_devices:
             if 'GPU' in avialable_device:
@@ -143,16 +148,8 @@ def get_test_devices(device=None):
         if not test_devices:
             print(f"ERROR: {device} is not an available device.")
             sys.exit(1)
-    elif device == 'CPU':
-        test_devices.append('CPU')
-    elif device == 'NPU':
-        if 'NPU' in core.available_devices:
-                test_devices.append('NPU')
-        else:
-            print(f"ERROR: {device} is not an available device.")
-            sys.exit(1)
-    # catch specific gpu or npu callout if multiple devices are available
-    elif device is not None:
+
+    elif device:
         if device in core.available_devices:
             test_devices.append(device)
         else:
@@ -168,6 +165,7 @@ def run_tests(tests, test_dir, device=None):
     test_devices = get_test_devices(device)
     test_results = {}
     test_failures = {}
+
     for test_file in tests:
         test_results[test_file] = {}
         test_path = os.path.join(test_dir, test_file)
@@ -191,18 +189,22 @@ def dump_errors(failures, filename):
             for device in failures[test]:
                 f.write(f"{device}: \n")
                 f.write(f"{failures[test][device]}\n")
+
     return
 
 def dump_results(sys_info, results, failures, filename):
     export_dict = {}
     export_dict['Platform Info'] = sys_info
     export_dict['Tests'] = results
+
     if failures:
         export_dict['Errors'] = failures
+    
     json_data = json.dumps(export_dict, indent=4)
     with open(filename, 'w') as f:
         f.write(json_data)
     print(f"Test results written to {filename}")
+
     return
 
 def main(tests, test_dir, device=None):    
@@ -219,6 +221,7 @@ def main(tests, test_dir, device=None):
     print('')
     dump_results(sys_info, results, failures, results_json_filename)
     print('')
+
     if failures:
         fail_help = """You might need to install additional drivers for your hardware:\n
 Intel instructions - Additional Configurations For Hardware:
@@ -238,7 +241,7 @@ https://github.com/openvinotoolkit/openvino_contrib/tree/master/modules/nvidia_p
 
 if __name__ == '__main__':
     tests = {}
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description='OpenVINO Test Launcher')
     parser.add_argument('--info', help='Show platform information', action='store_true')
     parser.add_argument('--tests_dir', help='Directory containing test files', default=TEST_DIR)
     parser.add_argument('--device', help='Device to run tests on', default=None)
