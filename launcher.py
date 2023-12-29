@@ -27,12 +27,12 @@ def show_platform_information():
     for device in core.available_devices:
         sysinfo['available_devices'][device] = core.get_property(device, 'FULL_DEVICE_NAME')
 
-    print("\n")
+    print()
     print(f"{'Platform':20}: {sysinfo['platform']}")
     print(f"{'Kernel Version':20}: {sysinfo['kernel_version']}")
     print(f"{'Python Version':20}: {sysinfo['python_version']}")
     print(f"{'OpenVINO Version':20}: {sysinfo['openvino_version']}")
-    print("\n")
+    print()
 
     core = ov.Core()
     gpu_flag = False
@@ -44,6 +44,8 @@ def show_platform_information():
         print(f"{'GPU':10} {'None Found'}")
     if not 'NPU' in core.available_devices:
         print(f"{'NPU':10} {'None Found'}")
+    print()
+    
     return(sysinfo)
 
 def print_result_line(tests, test_file, test_results):
@@ -237,6 +239,7 @@ https://github.com/openvinotoolkit/openvino_contrib/tree/master/modules/nvidia_p
 if __name__ == '__main__':
     tests = {}
     parser = argparse.ArgumentParser()
+    parser.add_argument('--info', help='Show platform information', action='store_true')
     parser.add_argument('--tests_dir', help='Directory containing test files', default=TEST_DIR)
     parser.add_argument('--device', help='Device to run tests on', default=None)
     parser.add_argument('--full', help='Run all tests', action='store_true')
@@ -247,7 +250,9 @@ if __name__ == '__main__':
                                             in the format {filename: test description}")
     
     args = parser.parse_args()
-
+    if args.info:
+        show_platform_information()
+        sys.exit(0)
     if args.run_files:
         tests = get_tests_from_list(args.run_files, args.tests_dir)
     elif args.tests_json:

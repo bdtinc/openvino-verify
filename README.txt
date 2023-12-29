@@ -41,7 +41,6 @@ TODO:
 
 - Fix this doc, convert to md. 
 - Add a developer doc to discuss adding tests?
-- need an --info switch that just shows the platform information headers but doesn't run the tests.
 - look at adding typehints to launcher.py, see if I need to clean up those nested logic loops for clarity.
 - add either extra script or a launcher.py switch to clean up the downloads
 - script to set up the virtual env? Maybe instructions are good enough, dunno.
