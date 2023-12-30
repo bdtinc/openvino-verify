@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from typing import Dict, List, Tuple, Optional, Any
 import argparse
 import os
 from pathlib import Path
@@ -14,8 +15,8 @@ from yaspin import yaspin
 
 TEST_DIR = './ov-tests'
 
-def show_platform_information():
-    sysinfo = {}
+def show_platform_information() -> Dict[str, Any]:
+    sysinfo: Dict[str, Any] = {}
     sysinfo['platform'] = platform.platform()
     sysinfo['kernel_version'] = os.uname().release if os.name == 'posix' else platform.uname().release
     sysinfo['python_version'] = platform.python_version()
@@ -46,7 +47,7 @@ def show_platform_information():
 
     return(sysinfo)
 
-def print_result_line(tests, test_file, test_results):
+def print_result_line(tests: Dict[str, str], test_file: str, test_results: Dict[str, Any]) -> None:
     RED = '\033[91m'
     GREEN = '\033[92m'
     CLOSE = '\033[0m'
@@ -66,7 +67,7 @@ def print_result_line(tests, test_file, test_results):
 
     return
 
-def test_header_line():
+def test_header_line() -> None:
     core = ov.Core()
     header = f"{'Test':<50}"
     underline = f"{'-'*50:<50}"
@@ -78,8 +79,8 @@ def test_header_line():
 
     return
 
-def get_tests_from_dir(test_dir, tag='default'):
-    tests = {}
+def get_tests_from_dir(test_dir: str, tag: str = 'default') -> Dict[str, Any]:
+    tests: Dict[str, Any] = {}
 
     for test_file in os.listdir(test_dir):
         if test_file.endswith('.py'):
@@ -103,7 +104,7 @@ def get_tests_from_dir(test_dir, tag='default'):
 
     return tests
 
-def get_tests_from_list(test_list, test_dir):
+def get_tests_from_list(test_list: List[str], test_dir: str) -> Dict[str, str]:
     tests = {}
 
     for test_file in test_list:
@@ -119,7 +120,7 @@ def get_tests_from_list(test_list, test_dir):
 
     return tests
 
-def run_test(test_file, device='AUTO'):
+def run_test(test_file: str, device: Optional[str] = 'AUTO') -> Tuple[str, str]:
     cmd = f"python {test_file} --device {device}"
     result = ''
 
@@ -137,7 +138,7 @@ def run_test(test_file, device='AUTO'):
     
     return(status, result)
 
-def get_test_devices(device=None):
+def get_test_devices(device: Optional[str] = None) -> List[str]:
     core = ov.Core()
     test_devices = []
     # get all gpu devices if GPU is specified
@@ -161,7 +162,7 @@ def get_test_devices(device=None):
 
     return test_devices
 
-def run_tests(tests, test_dir, device=None):
+def run_tests(tests: Dict[str, str], test_dir: str, device: Optional[str] = None) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     test_devices = get_test_devices(device)
     test_results = {}
     test_failures = {}
@@ -182,7 +183,7 @@ def run_tests(tests, test_dir, device=None):
         print_result_line(tests, test_file, test_results)
     return (test_results, test_failures)
 
-def dump_errors(failures, filename):
+def dump_errors(failures: Dict[str, Any], filename: str) -> None:
     with open(filename, 'w') as f:
         for test in failures:
             f.write(f"{test}\n")
@@ -192,7 +193,7 @@ def dump_errors(failures, filename):
 
     return
 
-def dump_results(sys_info, results, failures, filename):
+def dump_results(sys_info: Dict[str, Any], results: Dict[str, Any], failures: Dict[str, Any], filename: str) -> None:
     export_dict = {}
     export_dict['Platform Info'] = sys_info
     export_dict['Tests'] = results
@@ -207,7 +208,7 @@ def dump_results(sys_info, results, failures, filename):
 
     return
 
-def main(tests, test_dir, device=None):    
+def main(tests: Dict[str, str], test_dir: str, device: Optional[str] = None) -> None:    
     #build results_json_filename
     now = datetime.datetime.now()
     date_time = now.strftime("%Y%m%d_%H%M%S")
