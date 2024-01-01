@@ -14,7 +14,7 @@ You should set up a python virtual environment to run this code:
 Place all the files from the repo in your virtual environment. 
 
 In order to install the specific python libraries used, run the following commands:
-$ pip install -r build-requirements.txt
+
 $ pip install -r requirements.txt
 
 RUNNING THE TEST SUITE 
@@ -41,9 +41,7 @@ TODO:
 
 - Fix this doc, convert to md. 
 - Add a developer doc to discuss adding tests?
-- look at adding typehints to launcher.py, see if I need to clean up those nested logic loops for clarity.
 - add either extra script or a launcher.py switch to clean up the downloads
-- script to set up the virtual env? Maybe instructions are good enough, dunno.
 - !! add python3-dev requirement to docs !!
 - make sure setuptools and wheel pip install are in virtenv setup section
 

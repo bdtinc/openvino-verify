@@ -6,6 +6,7 @@ data/
 output/
 devel/
 distil*/
+venv/
 **/pytorch-cifar-models
 # emacs related
 *.org
