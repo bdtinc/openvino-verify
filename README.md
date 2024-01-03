@@ -1,7 +1,13 @@
 # OpenVINO Verification Tester
-This is a small small suite of tests to confirm proper instillation and functioning of the !!LINK!!OpenVINO AI Toolkit
+This is a small small suite of tests to confirm proper instillation and functioning of the [OpenVINO AI Toolkit](https://www.intel.com/content/www/us/en/developer/tools/openvino-toolkit/overview.html)
 
 The only requirements are having OpenVINO and Python 3.8 or greater and ensuring the python 3 dev headers are installed.
+
+Useful links:
+
+[OpenVINO Install](https://docs.openvino.ai/2023.2/openvino_docs_install_guides_overview.html)
+
+[GPU Install Instructions](https://docs.openvino.ai/2023.2/openvino_docs_install_guides_configurations_for_intel_gpu.html)
 
 ## Quick Start (Ubuntu/Debian) 
 ```
