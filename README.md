@@ -64,8 +64,9 @@ There are a number of options for launcher.py.
 | --tests_json | JSON file containing tests to run in the format {filename: test description}. See examples in test-sets |
 | --tag TAG | Test files can be marked with a tag. Using this flag only files with the match tag will run. See the template in ov-tests for more details.
 
+### Adding Tests
 
-
+You can add tests by following the instructions in ov-tests/README.txt.
 
 
 
