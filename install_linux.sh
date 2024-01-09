@@ -8,7 +8,7 @@ echo "Python version: $python_version"
 printf -v int '%s <= 3.8' "$python_version"
 switch=$(echo $int | bc -l)
 
-if [ "$switch" -eq "0"]; then
+if [ "$switch" -eq "0" ]; then
     echo "Error: Python 3.8 or higher is required."
     exit 1
 fi
