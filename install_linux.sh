@@ -5,7 +5,10 @@ python_version=$(python3 -c "import sys; print('.'.join(map(str, sys.version_inf
 
 echo "Python version: $python_version"
 
-if [[ $python_version < "3.8" ]]; then
+printf -v int '%s <= 3.8' "$python_version"
+switch=$(echo $int | bc -l)
+
+if [ "$switch" -eq "0"]; then
     echo "Error: Python 3.8 or higher is required."
     exit 1
 fi
